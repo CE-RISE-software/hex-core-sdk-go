@@ -1,106 +1,480 @@
 openapi: 3.0.3
 info:
+  description: "Public and admin API for validating, creating, and querying records\
+    \ against versioned CE-RISE model artifacts."
   title: CE-RISE Hex Core Service API
-  version: 0.1.0
+  version: 0.0.1
 servers:
 - url: /
+tags:
+- description: Model-specific validation and record operations.
+  name: Models
+- description: Public endpoints for listing supported models and API metadata.
+  name: Discovery
+- description: "Operational endpoints for health, readiness, status, and metrics."
+  name: Admin
 paths:
   /models:
     get:
+      description: Returns model/version pairs currently loaded in the active registry
+        index.
+      operationId: listModels
       responses:
         "200":
-          description: OK
-      summary: List available models
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelsResponse'
+          description: Registry models loaded successfully.
+      summary: List available model versions
+      tags:
+      - Discovery
   /models/{model}/versions/{version}:validate:
     post:
+      description: Runs configured validators for the selected model/version and returns
+        a merged validation report.
+      operationId: validateModelPayload
       parameters:
-      - explode: false
+      - description: "Model identifier, for example `re-indicators-specification`."
+        explode: false
         in: path
         name: model
         required: true
         schema:
           type: string
         style: simple
-      - explode: false
+      - description: "Model version string, for example `0.0.3`."
+        explode: false
         in: path
         name: version
         required: true
         schema:
           type: string
         style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateRequest'
+        required: true
       responses:
         "200":
-          description: Validation report
-      summary: Validate payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationReport'
+          description: Validation report returned.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Authentication required or invalid token.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Requested model/version is not present in registry.
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Payload is syntactically valid JSON but violates model constraints.
+      security:
+      - bearerAuth: []
+      summary: Validate payload against model rules
+      tags:
+      - Models
   /models/{model}/versions/{version}:create:
     post:
+      description: Validates input payload and writes a new record through the configured
+        record store adapter.
+      operationId: createRecord
       parameters:
-      - explode: false
+      - description: Model identifier.
+        explode: false
         in: path
         name: model
         required: true
         schema:
           type: string
         style: simple
-      - explode: false
+      - description: Model version.
+        explode: false
         in: path
         name: version
         required: true
         schema:
           type: string
         style: simple
+      - description: Client-generated key used to deduplicate retries for side-effecting
+          requests.
+        explode: false
+        in: header
+        name: Idempotency-Key
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRequest'
+        required: true
       responses:
         "200":
-          description: Created/returned record
-      summary: Create record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Record'
+          description: Record created (or idempotent replay returned existing result).
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Authentication required or invalid token.
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Idempotency conflict.
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Validation failed.
+      security:
+      - bearerAuth: []
+      summary: Validate and create a record
+      tags:
+      - Models
   /models/{model}/versions/{version}:query:
     post:
+      description: Applies a filter object and returns matching records provided by
+        the record store adapter.
+      operationId: queryRecords
       parameters:
-      - explode: false
+      - description: Model identifier.
+        explode: false
         in: path
         name: model
         required: true
         schema:
           type: string
         style: simple
-      - explode: false
+      - description: Model version.
+        explode: false
         in: path
         name: version
         required: true
         schema:
           type: string
         style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryRequest'
+        required: true
       responses:
         "200":
-          description: Matching records
-      summary: Query records
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+          description: Matching records returned.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Authentication required or invalid token.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Requested model/version is not present in registry.
+      security:
+      - bearerAuth: []
+      summary: Query records for a model version
+      tags:
+      - Models
   /admin/health:
     get:
+      description: Returns service process liveness.
+      operationId: health
       responses:
         "200":
-          description: Alive
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+          description: Service is alive.
       summary: Liveness probe
+      tags:
+      - Admin
   /admin/ready:
     get:
+      description: Returns readiness based on runtime adapter and registry state.
+      operationId: ready
       responses:
         "200":
-          description: Ready
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadyResponse'
+          description: Service is ready to accept traffic.
         "503":
-          description: Not ready
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadyResponse'
+          description: Service is not ready.
       summary: Readiness probe
+      tags:
+      - Admin
   /admin/status:
     get:
+      description: Returns runtime status payload useful for operations dashboards.
+      operationId: status
       responses:
         "200":
-          description: Status
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+          description: Status payload returned.
+      security:
+      - bearerAuth: []
       summary: Runtime status
+      tags:
+      - Admin
   /admin/metrics:
     get:
+      description: Returns Prometheus exposition format when metrics are enabled.
+      operationId: metrics
       responses:
         "200":
-          description: Metrics text
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Metrics text returned.
         "404":
-          description: Metrics disabled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Metrics endpoint disabled.
       summary: Prometheus metrics
+      tags:
+      - Admin
 components:
-  schemas: {}
+  schemas:
+    ModelVersion:
+      example:
+        id: id
+        version: version
+      properties:
+        id:
+          description: Model identifier.
+          type: string
+        version:
+          description: Model version string.
+          type: string
+      required:
+      - id
+      - version
+      type: object
+    ModelsResponse:
+      example:
+        models:
+        - id: id
+          version: version
+        - id: id
+          version: version
+      properties:
+        models:
+          items:
+            $ref: '#/components/schemas/ModelVersion'
+          type: array
+      required:
+      - models
+      type: object
+    ValidateRequest:
+      example:
+        payload:
+          key: ""
+      properties:
+        payload:
+          additionalProperties: true
+          description: Candidate record payload to validate.
+          type: object
+      required:
+      - payload
+      type: object
+    ValidationResult:
+      example:
+        severity: severity
+        path: path
+        message: message
+      properties:
+        path:
+          description: JSON path or pointer of the failing field when available.
+          type: string
+        message:
+          description: Human-readable validation message.
+          type: string
+        severity:
+          description: Validation severity label when provided by validator.
+          type: string
+      type: object
+    ValidationReport:
+      example:
+        passed: true
+        results:
+        - severity: severity
+          path: path
+          message: message
+        - severity: severity
+          path: path
+          message: message
+      properties:
+        passed:
+          description: True when no blocking validation issues were found.
+          type: boolean
+        results:
+          items:
+            $ref: '#/components/schemas/ValidationResult'
+          type: array
+      required:
+      - passed
+      - results
+      type: object
+    CreateRequest:
+      example:
+        payload:
+          key: ""
+      properties:
+        payload:
+          additionalProperties: true
+          description: Payload to validate and persist as a new record.
+          type: object
+      required:
+      - payload
+      type: object
+    Record:
+      example:
+        payload:
+          key: ""
+        model: model
+        id: id
+        version: version
+      properties:
+        id:
+          description: Record identifier returned by the store adapter.
+          type: string
+        model:
+          description: Model identifier used for this record.
+          type: string
+        version:
+          description: Model version used for this record.
+          type: string
+        payload:
+          additionalProperties: true
+          description: Opaque business payload routed to the IO adapter.
+          type: object
+      required:
+      - id
+      - model
+      - payload
+      - version
+      type: object
+    QueryRequest:
+      example:
+        filter:
+          key: ""
+      properties:
+        filter:
+          additionalProperties: true
+          description: Adapter-specific filter object for query execution.
+          type: object
+      required:
+      - filter
+      type: object
+    QueryResponse:
+      example:
+        records:
+        - payload:
+            key: ""
+          model: model
+          id: id
+          version: version
+        - payload:
+            key: ""
+          model: model
+          id: id
+          version: version
+      properties:
+        records:
+          items:
+            $ref: '#/components/schemas/Record'
+          type: array
+      required:
+      - records
+      type: object
+    HealthResponse:
+      example:
+        status: ok
+      properties:
+        status:
+          description: Health status string.
+          example: ok
+          type: string
+      required:
+      - status
+      type: object
+    ReadyResponse:
+      example:
+        status: ready
+      properties:
+        status:
+          description: Readiness status string.
+          example: ready
+          type: string
+      required:
+      - status
+      type: object
+    ErrorResponse:
+      example:
+        code: code
+        details: ""
+        message: message
+      properties:
+        code:
+          description: Stable machine-readable error code.
+          type: string
+        message:
+          description: Human-readable error message.
+          type: string
+        details:
+          description: Optional error details payload.
+          nullable: true
+      required:
+      - code
+      - message
+      type: object
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: JWT
+      description: JWT bearer token for authenticated endpoints.
+      scheme: bearer
+      type: http
