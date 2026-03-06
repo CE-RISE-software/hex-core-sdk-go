@@ -1,5 +1,5 @@
 /*
-CE-RISE Hex Core Service API
+CE-RISE Hexagonsl Core Service API
 
 Public and admin API for validating, creating, and querying records against versioned CE-RISE model artifacts.
 
