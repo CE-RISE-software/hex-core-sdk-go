@@ -1,8 +1,8 @@
-# CE-RISE Software Projects Template
+# CE-RISE Go Software Development Kit for Hexagonal Core Service
 
 [![DOI](https://zenodo.org/badge/DOI/TOBEOBTAINED.svg)](https://doi.org/TOBEOBTAINED)
 
-A repository to provide a template for a faster setup of open science and open source software projects within the CE-RISE project.
+A repository to provide a Go SDK for CE-RISE Hex Core Service at https://codeberg.org/CE-RISE-software/hex-core-service.
 
 ---
 
