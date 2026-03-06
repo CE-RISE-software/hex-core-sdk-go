@@ -1,5 +1,5 @@
 /*
-CE-RISE Hexagonsl Core Service API
+CE-RISE Hex Core Service API
 
 Testing AdminAPIService
 
