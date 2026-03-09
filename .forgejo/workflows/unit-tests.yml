@@ -1,0 +1,21 @@
+name: Unit Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  go-test:
+    runs-on: codeberg-tiny
+
+    steps:
+      - name: Checkout
+        uses: https://github.com/actions/checkout@v4
+
+      - name: Set up Go
+        uses: https://github.com/actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Run tests
+        run: go test ./... -v
