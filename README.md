@@ -69,7 +69,7 @@ Licensed under the [European Union Public Licence v1.2 (EUPL-1.2)](LICENSE).
 
 ## Contributing
 
-This repository is maintained on [Codeberg](https://codeberg.org/CE-RISE-software/template-software) — the canonical source of truth. The GitHub repository is a read mirror used for release archival and Zenodo integration. Issues and pull requests should be opened on Codeberg.
+This repository is maintained on [Codeberg](https://codeberg.org/CE-RISE-software/hex-core-sdk-go) — the canonical source of truth. The GitHub repository is a read mirror used for release archival and Zenodo integration. Issues and pull requests should be opened on Codeberg.
 
 ---
 
