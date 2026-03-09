@@ -60,7 +60,7 @@ func main() {
 ## API Documentation
 
 - pkg.go.dev reference: https://pkg.go.dev/github.com/CE-RISE-software/hex-core-sdk-go
-- Generated endpoint/model markdown: `docs/`
+- Generated documentation website: https://ce-rise-software.codeberg.page/hex-core-sdk-go/
 
 
 ## License
