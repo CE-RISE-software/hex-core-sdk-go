@@ -1,5 +1,5 @@
 /*
-CE-RISE Hexagonal Core Service API
+CE-RISE Hex Core Service API
 
 Public and admin API for validating, creating, and querying records against versioned CE-RISE model artifacts.
 
@@ -89,7 +89,7 @@ type Configuration struct {
 func NewConfiguration() *Configuration {
 	cfg := &Configuration{
 		DefaultHeader:    make(map[string]string),
-		UserAgent:        "OpenAPI-Generator/0.0.0-commit.148/go",
+		UserAgent:        "OpenAPI-Generator/0.0.0-commit.154/go",
 		Debug:            false,
 		Servers:          ServerConfigurations{
 			{
