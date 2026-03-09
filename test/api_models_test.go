@@ -1,5 +1,5 @@
 /*
-CE-RISE Hexagonal Core Service API
+CE-RISE Hex Core Service API
 
 Testing ModelsAPIService
 
@@ -14,7 +14,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+	openapiclient "github.com/CE-RISE-software/hex-core-sdk-go"
 )
 
 func Test_hexcoresdk_ModelsAPIService(t *testing.T) {
