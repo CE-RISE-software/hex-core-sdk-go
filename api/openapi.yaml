@@ -5,7 +5,8 @@ info:
   title: CE-RISE Hex Core Service API
   version: 0.0.1
 servers:
-- url: /
+- description: Local default server
+  url: http://localhost:8080
 tags:
 - description: Model-specific validation and record operations.
   name: Models
