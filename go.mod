@@ -1,4 +1,4 @@
-module github.com/CE-RISE-software/hex-core-sdk-go
+module github.com/GIT_USER_ID/GIT_REPO_ID
 
 go 1.18
 
