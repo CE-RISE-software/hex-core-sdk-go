@@ -1,5 +1,5 @@
 /*
-CE-RISE Hex Core Service API
+CE-RISE Hexagonal Core Service API
 
 Testing DiscoveryAPIService
 
