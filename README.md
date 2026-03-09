@@ -1,15 +1,66 @@
 # CE-RISE Go Software Development Kit for Hexagonal Core Service
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/CE-RISE-software/hex-core-sdk-go.svg)](https://pkg.go.dev/github.com/CE-RISE-software/hex-core-sdk-go)
 [![DOI](https://zenodo.org/badge/DOI/TOBEOBTAINED.svg)](https://doi.org/TOBEOBTAINED)
 
-A repository to provide a Go SDK for CE-RISE Hex Core Service at https://codeberg.org/CE-RISE-software/hex-core-service.
+A Go SDK for the CE-RISE Hex Core Service: https://codeberg.org/CE-RISE-software/hex-core-service.
 
 ---
 
-## What this repository contains
-- Actions in `.forgejo/workflows` for Codeberg runners to
-- Actions in `.github/workflows` for GitHub runners in mirror to tag releases and initiate archiving on Zenodo through the GitHub / Zenodo integration.
-- This README should be expanded as needed. Sections `License`, `Contributing`, and the footer should be retained but updated as needed.
+## Package
+
+- Module: `github.com/CE-RISE-software/hex-core-sdk-go`
+- Go package name: `hexcoresdk`
+- Reference docs: https://pkg.go.dev/github.com/CE-RISE-software/hex-core-sdk-go
+
+## Install
+
+```bash
+go get github.com/CE-RISE-software/hex-core-sdk-go@latest
+```
+
+## Use the SDK
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	hexcoresdk "github.com/CE-RISE-software/hex-core-sdk-go"
+)
+
+func main() {
+	cfg := hexcoresdk.NewConfiguration()
+	cfg.Servers = hexcoresdk.ServerConfigurations{
+		{
+			URL: "https://your-hex-core.example.org",
+		},
+	}
+
+	client := hexcoresdk.NewAPIClient(cfg)
+
+	health, httpRes, err := client.AdminAPI.Health(context.Background()).Execute()
+	if err != nil {
+		log.Fatalf("health request failed: %v", err)
+	}
+	fmt.Printf("health status code: %d\n", httpRes.StatusCode)
+	fmt.Printf("health response: %+v\n", health)
+
+	models, _, err := client.DiscoveryAPI.ListModels(context.Background()).Execute()
+	if err != nil {
+		log.Fatalf("list models failed: %v", err)
+	}
+	fmt.Printf("models response: %+v\n", models)
+}
+```
+
+## API Documentation
+
+- pkg.go.dev reference: https://pkg.go.dev/github.com/CE-RISE-software/hex-core-sdk-go
+- Generated endpoint/model markdown: `docs/`
 
 
 ## License
