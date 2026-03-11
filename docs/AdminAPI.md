@@ -8,6 +8,7 @@ Method | HTTP request | Description
 [**Metrics**](AdminAPI.md#Metrics) | **Get** /admin/metrics | Prometheus metrics
 [**Ready**](AdminAPI.md#Ready) | **Get** /admin/ready | Readiness probe
 [**Status**](AdminAPI.md#Status) | **Get** /admin/status | Runtime status
+[**Version**](AdminAPI.md#Version) | **Get** /admin/version | Service and OpenAPI version
 
 
 
@@ -244,6 +245,67 @@ Other parameters are passed through a pointer to a apiStatusRequest struct via t
 ### Authorization
 
 [bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## Version
+
+> VersionResponse Version(ctx).Execute()
+
+Service and OpenAPI version
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/CE-RISE-software/hex-core-sdk-go"
+)
+
+func main() {
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.AdminAPI.Version(context.Background()).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `AdminAPI.Version``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `Version`: VersionResponse
+	fmt.Fprintf(os.Stdout, "Response from `AdminAPI.Version`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+This endpoint does not need any parameter.
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiVersionRequest struct via the builder pattern
+
+
+### Return type
+
+[**VersionResponse**](VersionResponse.md)
+
+### Authorization
+
+No authorization required
 
 ### HTTP request headers
 

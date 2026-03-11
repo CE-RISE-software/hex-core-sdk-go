@@ -3,7 +3,7 @@ info:
   description: "Public and admin API for validating, creating, and querying records\
     \ against versioned CE-RISE model artifacts."
   title: CE-RISE Hex Core Service API
-  version: 0.0.2
+  version: 0.0.3
 servers:
 - description: Local default server
   url: http://localhost:8080
@@ -219,6 +219,21 @@ paths:
                 $ref: '#/components/schemas/HealthResponse'
           description: Service is alive.
       summary: Liveness probe
+      tags:
+      - Admin
+  /admin/version:
+    get:
+      description: Returns running service version and bundled OpenAPI specification
+        version.
+      operationId: version
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionResponse'
+          description: Version payload returned.
+      summary: Service and OpenAPI version
       tags:
       - Admin
   /admin/ready:
@@ -442,6 +457,27 @@ components:
           type: string
       required:
       - status
+      type: object
+    VersionResponse:
+      example:
+        service: hex-core-service
+        openapi_version: openapi_version
+        service_version: service_version
+      properties:
+        service:
+          description: Stable service identifier.
+          example: hex-core-service
+          type: string
+        service_version:
+          description: Running service build version from crate metadata.
+          type: string
+        openapi_version:
+          description: Bundled OpenAPI document version from info.version.
+          type: string
+      required:
+      - openapi_version
+      - service
+      - service_version
       type: object
     ReadyResponse:
       example:
