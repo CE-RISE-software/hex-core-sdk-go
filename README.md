@@ -1,7 +1,7 @@
 # CE-RISE Go Software Development Kit for Hexagonal Core Service
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/CE-RISE-software/hex-core-sdk-go.svg)](https://pkg.go.dev/github.com/CE-RISE-software/hex-core-sdk-go)
-[![DOI](https://zenodo.org/badge/DOI/TOBEOBTAINED.svg)](https://doi.org/TOBEOBTAINED)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18953368.svg)](https://doi.org/10.5281/zenodo.18953368)
 
 A Go SDK for the CE-RISE Hex Core Service: https://codeberg.org/CE-RISE-software/hex-core-service.
 
