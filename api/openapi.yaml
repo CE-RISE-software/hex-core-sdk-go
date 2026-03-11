@@ -3,7 +3,7 @@ info:
   description: "Public and admin API for validating, creating, and querying records\
     \ against versioned CE-RISE model artifacts."
   title: CE-RISE Hex Core Service API
-  version: 0.0.3
+  version: 0.0.4
 servers:
 - description: Local default server
   url: http://localhost:8080
@@ -234,6 +234,21 @@ paths:
                 $ref: '#/components/schemas/VersionResponse'
           description: Version payload returned.
       summary: Service and OpenAPI version
+      tags:
+      - Admin
+  /admin/models/count:
+    get:
+      description: Returns the number of model/version entries currently loaded in
+        the active registry index.
+      operationId: modelsCount
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelCountResponse'
+          description: Model count returned.
+      summary: Current model count
       tags:
       - Admin
   /admin/ready:
@@ -478,6 +493,18 @@ components:
       - openapi_version
       - service
       - service_version
+      type: object
+    ModelCountResponse:
+      example:
+        models_count: 0
+      properties:
+        models_count:
+          description: Number of models currently indexed by the registry.
+          format: int64
+          minimum: 0
+          type: integer
+      required:
+      - models_count
       type: object
     ReadyResponse:
       example:

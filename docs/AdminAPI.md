@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**Health**](AdminAPI.md#Health) | **Get** /admin/health | Liveness probe
 [**Metrics**](AdminAPI.md#Metrics) | **Get** /admin/metrics | Prometheus metrics
+[**ModelsCount**](AdminAPI.md#ModelsCount) | **Get** /admin/models/count | Current model count
 [**Ready**](AdminAPI.md#Ready) | **Get** /admin/ready | Readiness probe
 [**Status**](AdminAPI.md#Status) | **Get** /admin/status | Runtime status
 [**Version**](AdminAPI.md#Version) | **Get** /admin/version | Service and OpenAPI version
@@ -128,6 +129,67 @@ No authorization required
 
 - **Content-Type**: Not defined
 - **Accept**: text/plain, application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## ModelsCount
+
+> ModelCountResponse ModelsCount(ctx).Execute()
+
+Current model count
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/CE-RISE-software/hex-core-sdk-go"
+)
+
+func main() {
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.AdminAPI.ModelsCount(context.Background()).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `AdminAPI.ModelsCount``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `ModelsCount`: ModelCountResponse
+	fmt.Fprintf(os.Stdout, "Response from `AdminAPI.ModelsCount`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+This endpoint does not need any parameter.
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiModelsCountRequest struct via the builder pattern
+
+
+### Return type
+
+[**ModelCountResponse**](ModelCountResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
