@@ -21,8 +21,7 @@ var _ MappedNullable = &QueryRequest{}
 
 // QueryRequest struct for QueryRequest
 type QueryRequest struct {
-	// Adapter-specific filter object for query execution.
-	Filter map[string]interface{} `json:"filter"`
+	Filter RecordQueryFilter `json:"filter"`
 }
 
 type _QueryRequest QueryRequest
@@ -31,7 +30,7 @@ type _QueryRequest QueryRequest
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewQueryRequest(filter map[string]interface{}) *QueryRequest {
+func NewQueryRequest(filter RecordQueryFilter) *QueryRequest {
 	this := QueryRequest{}
 	this.Filter = filter
 	return &this
@@ -46,9 +45,9 @@ func NewQueryRequestWithDefaults() *QueryRequest {
 }
 
 // GetFilter returns the Filter field value
-func (o *QueryRequest) GetFilter() map[string]interface{} {
+func (o *QueryRequest) GetFilter() RecordQueryFilter {
 	if o == nil {
-		var ret map[string]interface{}
+		var ret RecordQueryFilter
 		return ret
 	}
 
@@ -57,15 +56,15 @@ func (o *QueryRequest) GetFilter() map[string]interface{} {
 
 // GetFilterOk returns a tuple with the Filter field value
 // and a boolean to check if the value has been set.
-func (o *QueryRequest) GetFilterOk() (map[string]interface{}, bool) {
+func (o *QueryRequest) GetFilterOk() (*RecordQueryFilter, bool) {
 	if o == nil {
-		return map[string]interface{}{}, false
+		return nil, false
 	}
-	return o.Filter, true
+	return &o.Filter, true
 }
 
 // SetFilter sets field value
-func (o *QueryRequest) SetFilter(v map[string]interface{}) {
+func (o *QueryRequest) SetFilter(v RecordQueryFilter) {
 	o.Filter = v
 }
 

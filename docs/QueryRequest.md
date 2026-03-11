@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Filter** | **map[string]interface{}** | Adapter-specific filter object for query execution. | 
+**Filter** | [**RecordQueryFilter**](RecordQueryFilter.md) |  | 
 
 ## Methods
 
 ### NewQueryRequest
 
-`func NewQueryRequest(filter map[string]interface{}, ) *QueryRequest`
+`func NewQueryRequest(filter RecordQueryFilter, ) *QueryRequest`
 
 NewQueryRequest instantiates a new QueryRequest object
 This constructor will assign default values to properties that have it defined,
@@ -27,20 +27,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetFilter
 
-`func (o *QueryRequest) GetFilter() map[string]interface{}`
+`func (o *QueryRequest) GetFilter() RecordQueryFilter`
 
 GetFilter returns the Filter field if non-nil, zero value otherwise.
 
 ### GetFilterOk
 
-`func (o *QueryRequest) GetFilterOk() (*map[string]interface{}, bool)`
+`func (o *QueryRequest) GetFilterOk() (*RecordQueryFilter, bool)`
 
 GetFilterOk returns a tuple with the Filter field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetFilter
 
-`func (o *QueryRequest) SetFilter(v map[string]interface{})`
+`func (o *QueryRequest) SetFilter(v RecordQueryFilter)`
 
 SetFilter sets Filter field to given value.
 

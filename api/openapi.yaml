@@ -432,12 +432,23 @@ components:
     QueryRequest:
       example:
         filter:
-          key: ""
+          offset: 0
+          limit: 0
+          where:
+          - op: eq
+            field: field
+            value: ""
+          - op: eq
+            field: field
+            value: ""
+          sort:
+          - field: field
+            direction: asc
+          - field: field
+            direction: asc
       properties:
         filter:
-          additionalProperties: true
-          description: Adapter-specific filter object for query execution.
-          type: object
+          $ref: '#/components/schemas/RecordQueryFilter'
       required:
       - filter
       type: object
@@ -461,6 +472,98 @@ components:
           type: array
       required:
       - records
+      type: object
+    RecordQueryFilter:
+      additionalProperties: false
+      description: Canonical backend query dialect shared across record store adapters.
+      example:
+        offset: 0
+        limit: 0
+        where:
+        - op: eq
+          field: field
+          value: ""
+        - op: eq
+          field: field
+          value: ""
+        sort:
+        - field: field
+          direction: asc
+        - field: field
+          direction: asc
+      properties:
+        where:
+          description: AND-only list of query predicates.
+          items:
+            $ref: '#/components/schemas/RecordQueryCondition'
+          type: array
+        sort:
+          description: Optional list of sort directives applied in order.
+          items:
+            $ref: '#/components/schemas/RecordQuerySort'
+          type: array
+        limit:
+          description: Maximum number of records to return.
+          format: int64
+          minimum: 0
+          type: integer
+        offset:
+          description: Zero-based row offset for pagination.
+          format: int64
+          minimum: 0
+          type: integer
+      required:
+      - where
+      type: object
+    RecordQueryCondition:
+      additionalProperties: false
+      example:
+        op: eq
+        field: field
+        value: ""
+      properties:
+        field:
+          description: Field path such as `id` or `payload.record_scope`.
+          type: string
+        op:
+          description: Comparison operator.
+          enum:
+          - eq
+          - ne
+          - in
+          - contains
+          - exists
+          - gt
+          - gte
+          - lt
+          - lte
+          type: string
+        value:
+          description: Operand value. For `in` this must be an array. For `exists`
+            this should be boolean.
+      required:
+      - field
+      - op
+      - value
+      type: object
+    RecordQuerySort:
+      additionalProperties: false
+      example:
+        field: field
+        direction: asc
+      properties:
+        field:
+          description: Sortable field path such as `created_at` or `payload.record_scope`.
+          type: string
+        direction:
+          description: Sort direction.
+          enum:
+          - asc
+          - desc
+          type: string
+      required:
+      - direction
+      - field
       type: object
     HealthResponse:
       example:

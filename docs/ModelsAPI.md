@@ -110,7 +110,7 @@ import (
 func main() {
 	model := "model_example" // string | Model identifier.
 	version := "version_example" // string | Model version.
-	queryRequest := *openapiclient.NewQueryRequest(map[string]interface{}{"key": interface{}(123)}) // QueryRequest | 
+	queryRequest := *openapiclient.NewQueryRequest(*openapiclient.NewRecordQueryFilter([]openapiclient.RecordQueryCondition{*openapiclient.NewRecordQueryCondition("Field_example", "Op_example", interface{}(123))})) // QueryRequest | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
